@@ -228,7 +228,7 @@ def plotear_historico_entrenamiento(history):
     plt.show()
 
 # ==================== PIPELINE COMPLETO ====================
-def ejecutar_pipeline_completo():
+def ejecutar_pipeline_completo(train_dir, val_dir, logs_dir):
     """
     Ejecuta el pipeline completo de entrenamiento
     """
@@ -238,7 +238,7 @@ def ejecutar_pipeline_completo():
     
     # 1. Configuración
     print("\n[1/8] Configurando parámetros...")
-    params = configurar_parametros()
+    params = configurar_parametros(train_dir, val_dir)
     
     # 2. Cargar datos
     print("\n[2/8] Cargando datos...")
@@ -270,40 +270,26 @@ def ejecutar_pipeline_completo():
     
     # 8. Guardar modelo final
     print("\n[8/8] Guardando modelo final...")
-    model.save('modelo_final_maiz.h5')
-    model.save('modelo_final_maiz_savedmodel', save_format='tf')
+    model.save(os.path.join(logs_dir, 'modelo_final_maiz.h5'))
+    model.save(os.path.join(logs_dir,'modelo_final_maiz_savedmodel'), save_format='tf')
     
     print("\n" + "="*50)
     print("✓ ENTRENAMIENTO COMPLETADO")
     print("="*50)
-    print(f"Modelo guardado en: modelo_final_maiz.h5")
+    print(f"Modelo guardado en: {logs_dir}modelo_final_maiz.h5")
     print(f"Mejor accuracy: {max(history.history['val_accuracy']):.4f}")
     
     return model, class_names
 
 # ==================== USO DEL SISTEMA ====================
 if __name__ == "__main__":
-    """
-    Estructura de carpetas esperada:
-    
-    data/
-    ├── train/
-    │   ├── sana/
-    │   ├── plaga_1/
-    │   ├── plaga_2/
-    │   └── ...
-    ├── validation/
-    │   ├── sana/
-    │   ├── plaga_1/
-    │   └── ...
-    └── test/
-        ├── sana/
-        ├── plaga_1/
-        └── ...
-    """
+    BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+    logs_DIR = os.path.join(BASE_DIR, 'logs')
+    DATASET_DIR = input("Ingrese la ruta del dataset: ")
+    train_DIR = os.path.join(DATASET_DIR,'train')
+    val_DIR = os.path.join(DATASET_DIR,'val')
     
     # Ejecutar pipeline completo
-    model, class_names = ejecutar_pipeline_completo()
+    model, class_names = ejecutar_pipeline_completo(train_DIR, val_DIR,logs_DIR)
     
-    # Ejemplo de predicción en imagen individual
-    # predecir_imagen(model, 'ruta/a/tu/imagen.jpg', class_names)
+    

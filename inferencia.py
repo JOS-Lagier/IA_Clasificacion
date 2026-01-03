@@ -3,6 +3,10 @@ import tensorflow as tf
 from tensorflow import keras
 import numpy as np
 import matplotlib.pyplot as plt
+import os
+
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+logs_DIR = os.path.join(BASE_DIR, 'logs')
 
 # ==================== PREDICCIÓN ====================
 def predecir_imagen(model, img_path, class_names, img_size=(300, 300)):
@@ -38,7 +42,13 @@ def predecir_imagen(model, img_path, class_names, img_size=(300, 300)):
     return predicted_class, confidence, predictions[0]
 
 if __name__ == "__main__":
-    img_path =""
-    class_names = cs
-    model = ""
+
+    print("\n==================== PREDICCIÓN DE IMAGEN ====================")
+    img_path = input("Ingrese la ruta de la imagen a predecir: ")
+    class_names = ""
+    model_PATH = os.path.join(logs_DIR, 'modelo_final_maiz.h5')
+    model = tf.keras.models.load_model(model_PATH)
     predecir_imagen(model, img_path, class_names)
+
+# Ejemplo de predicción en imagen individual
+    # predecir_imagen(model, 'ruta/a/tu/imagen.jpg', class_names)
