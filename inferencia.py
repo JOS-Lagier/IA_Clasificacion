@@ -1,4 +1,4 @@
-from train import class_names as cs
+
 import tensorflow as tf
 from tensorflow import keras
 import numpy as np
@@ -41,3 +41,4 @@ if __name__ == "__main__":
     img_path =""
     class_names = cs
     model = ""
+    predecir_imagen(model, img_path, class_names)
